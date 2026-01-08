@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.middleware';
 import prisma from '../config/database';
 import path from 'path';
 import fs from 'fs';
+import { hasPermission } from '../utils/permissions';
 
 // Ensure uploads directory exists (relative to project root)
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads');

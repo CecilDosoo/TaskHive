@@ -20,7 +20,7 @@ const loginValidation = [
 // Routes
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
-router.get('/me', authenticate, getMe);
+router.get('/me', authenticate, getMe as any);
 router.post('/verify-email', verifyEmail);
 router.post('/resend-verification', resendVerificationEmail);
 

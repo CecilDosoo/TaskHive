@@ -4,7 +4,7 @@ import { authenticate } from '../middleware/auth.middleware';
 
 const router = Router();
 
-router.get('/projects/:projectId/activity', authenticate, getActivityLogs);
+router.get('/projects/:projectId/activity', authenticate, getActivityLogs as any);
 
 export default router;
 

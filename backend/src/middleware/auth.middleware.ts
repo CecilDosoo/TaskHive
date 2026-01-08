@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
@@ -10,11 +10,12 @@ export interface AuthRequest extends Request {
   };
 }
 
-export const authenticate = (
-  req: AuthRequest,
+export const authenticate: RequestHandler = (
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const authReq = req as AuthRequest;
   try {
     const authHeader = req.headers.authorization;
 
@@ -29,10 +30,10 @@ export const authenticate = (
       throw new Error('JWT_SECRET is not defined');
     }
 
-    const decoded = jwt.verify(token, jwtSecret) as { userId: string; email: string; name: string };
+    const decoded = jwt.verify(token, jwtSecret as string) as { userId: string; email: string; name: string };
 
-    req.userId = decoded.userId;
-    req.user = {
+    authReq.userId = decoded.userId;
+    authReq.user = {
       id: decoded.userId,
       email: decoded.email,
       name: decoded.name,

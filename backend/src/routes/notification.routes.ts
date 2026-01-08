@@ -13,11 +13,11 @@ const router = Router();
 // All routes require authentication
 router.use(authenticate);
 
-router.get('/', getNotifications);
-router.get('/unread-count', getUnreadCount);
-router.put('/:id/read', markAsRead);
-router.put('/read-all', markAllAsRead);
-router.delete('/:id', deleteNotification);
+router.get('/', getNotifications as any);
+router.get('/unread-count', getUnreadCount as any);
+router.put('/:id/read', markAsRead as any);
+router.put('/read-all', markAllAsRead as any);
+router.delete('/:id', deleteNotification as any);
 
 export default router;
 

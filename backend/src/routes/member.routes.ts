@@ -25,11 +25,11 @@ const updateRoleValidation = [
 ];
 
 // Routes
-router.get('/project/:id', getProjectMembers);
-router.post('/project/:id/invite', inviteMemberValidation, inviteMember);
-router.put('/project/:id/member/:userId', updateRoleValidation, updateMemberRole);
-router.delete('/project/:id/member/:userId', removeMember);
-router.post('/project/:id/leave', leaveProject);
+router.get('/project/:id', getProjectMembers as any);
+router.post('/project/:id/invite', inviteMemberValidation, inviteMember as any);
+router.put('/project/:id/member/:userId', updateRoleValidation, updateMemberRole as any);
+router.delete('/project/:id/member/:userId', removeMember as any);
+router.post('/project/:id/leave', leaveProject as any);
 
 export default router;
 

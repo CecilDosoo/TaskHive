@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 
 interface TokenPayload {
   userId: string;
@@ -14,7 +14,8 @@ export const generateToken = (payload: TokenPayload): string => {
     throw new Error('JWT_SECRET is not defined');
   }
 
-  return jwt.sign(payload, jwtSecret, { expiresIn });
+  // Type assertion needed for strict TypeScript
+  return jwt.sign(payload, jwtSecret, { expiresIn } as SignOptions);
 };
 
 export const verifyToken = (token: string): TokenPayload => {
@@ -24,7 +25,7 @@ export const verifyToken = (token: string): TokenPayload => {
     throw new Error('JWT_SECRET is not defined');
   }
 
-  return jwt.verify(token, jwtSecret) as TokenPayload;
+  return jwt.verify(token, jwtSecret as string) as TokenPayload;
 };
 
 

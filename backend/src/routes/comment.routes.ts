@@ -19,10 +19,10 @@ const commentValidation = [
 ];
 
 // Routes
-router.post('/task/:taskId', commentValidation, createComment);
-router.get('/task/:taskId', getComments);
-router.put('/:id', commentValidation, updateComment);
-router.delete('/:id', deleteComment);
+router.post('/task/:taskId', commentValidation, createComment as any);
+router.get('/task/:taskId', getComments as any);
+router.put('/:id', commentValidation, updateComment as any);
+router.delete('/:id', deleteComment as any);
 
 export default router;
 

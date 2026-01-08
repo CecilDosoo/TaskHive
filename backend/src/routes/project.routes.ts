@@ -20,11 +20,11 @@ const projectValidation = [
 ];
 
 // Routes
-router.post('/', projectValidation, createProject);
-router.get('/', getProjects);
-router.get('/:id', getProject);
-router.put('/:id', projectValidation, updateProject);
-router.delete('/:id', deleteProject);
+router.post('/', projectValidation, createProject as any);
+router.get('/', getProjects as any);
+router.get('/:id', getProject as any);
+router.put('/:id', projectValidation, updateProject as any);
+router.delete('/:id', deleteProject as any);
 
 export default router;
 

@@ -58,7 +58,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 
         return done(null, user);
       } catch (error) {
-        return done(error, null);
+        return done(error as Error);
       }
     }
   )
@@ -79,7 +79,7 @@ passport.deserializeUser(async (id: string, done) => {
     const user = await prisma.user.findUnique({ where: { id } });
     done(null, user);
   } catch (error) {
-    done(error, null);
+    done(error as Error);
   }
 });
 

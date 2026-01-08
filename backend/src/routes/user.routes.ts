@@ -8,7 +8,7 @@ const router = Router();
 router.use(authenticate);
 
 // Routes
-router.get('/search', searchUsers);
+router.get('/search', searchUsers as any);
 
 export default router;
 

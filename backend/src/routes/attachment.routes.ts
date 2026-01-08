@@ -40,9 +40,9 @@ const upload = multer({
 });
 
 // Routes
-router.post('/task/:taskId', upload.single('file'), uploadAttachment);
-router.get('/task/:taskId', getAttachments);
-router.delete('/:id', deleteAttachment);
+router.post('/task/:taskId', upload.single('file'), uploadAttachment as any);
+router.get('/task/:taskId', getAttachments as any);
+router.delete('/:id', deleteAttachment as any);
 
 export default router;
 

@@ -21,11 +21,11 @@ const taskValidation = [
 ];
 
 // Routes
-router.post('/', taskValidation, createTask);
-router.put('/:id', updateTask);
-router.delete('/:id', deleteTask);
-router.post('/:id/assign', body('userId').notEmpty(), assignTask);
-router.post('/:id/unassign', body('userId').notEmpty(), unassignTask);
+router.post('/', taskValidation, createTask as any);
+router.put('/:id', updateTask as any);
+router.delete('/:id', deleteTask as any);
+router.post('/:id/assign', body('userId').notEmpty(), assignTask as any);
+router.post('/:id/unassign', body('userId').notEmpty(), unassignTask as any);
 
 export default router;
 
