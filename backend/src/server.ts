@@ -1,7 +1,43 @@
-import dotenv from 'dotenv';
-dotenv.config();
+// Load environment variables (only in development, Railway provides them in production)
+if (process.env.NODE_ENV !== 'production') {
+  const dotenv = require('dotenv');
+  dotenv.config();
+}
 
-console.log('DATABASE_URL:', process.env.DATABASE_URL);
+// Debug: Check all environment variables (for Railway debugging)
+console.log('🔍 Environment Variables Check:');
+console.log('  NODE_ENV:', process.env.NODE_ENV || 'NOT SET');
+console.log('  PORT:', process.env.PORT || 'NOT SET');
+console.log('  DATABASE_URL:', process.env.DATABASE_URL ? `${process.env.DATABASE_URL.substring(0, 50)}...` : 'UNDEFINED ❌');
+console.log('  JWT_SECRET:', process.env.JWT_SECRET ? 'SET ✅' : 'UNDEFINED ❌');
+console.log('  FRONTEND_URL:', process.env.FRONTEND_URL || 'NOT SET');
+
+// List all PG* variables (Railway might use these instead)
+const pgVars = Object.keys(process.env).filter(key => key.startsWith('PG'));
+if (pgVars.length > 0) {
+  console.log('  Found PG* variables:', pgVars.join(', '));
+  // Try to construct DATABASE_URL from PG* variables if DATABASE_URL is missing
+  if (!process.env.DATABASE_URL && process.env.PGHOST) {
+    const pgUrl = `postgresql://${process.env.PGUSER || 'postgres'}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT || '5432'}/${process.env.PGDATABASE || 'railway'}${process.env.PGSSLMODE ? `?sslmode=${process.env.PGSSLMODE}` : ''}`;
+    process.env.DATABASE_URL = pgUrl;
+    console.log('  ✅ Constructed DATABASE_URL from PG* variables');
+  }
+} else {
+  console.log('  No PG* variables found');
+}
+
+// Final check
+if (!process.env.DATABASE_URL) {
+  console.error('\n❌ CRITICAL: DATABASE_URL is still not set!');
+  console.error('❌ This means Railway is not passing environment variables to your app.');
+  console.error('❌ Possible fixes:');
+  console.error('   1. Check if services are linked (PostgreSQL → Backend)');
+  console.error('   2. Verify Root Directory is set to "backend" in Settings → Deploy');
+  console.error('   3. Try redeploying after ensuring DATABASE_URL is in Variables');
+  console.error('   4. Check Railway plan/limits for environment variables');
+} else {
+  console.log('\n✅ DATABASE_URL is available!');
+}
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
