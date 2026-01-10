@@ -119,7 +119,7 @@ export default function ProjectSettingsModal({
           WebkitBackdropFilter: 'blur(4px)',
           zIndex: 99998,
         }}
-        onClick={(e) => {
+        onClick={() => {
           if (!updateProject.isPending && !deleteProject.isPending) {
             onClose();
           }

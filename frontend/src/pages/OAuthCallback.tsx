@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 export default function OAuthCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   useEffect(() => {
     const token = searchParams.get('token');
-    const emailVerified = searchParams.get('emailVerified') === 'true';
     const error = searchParams.get('error');
 
     if (error) {

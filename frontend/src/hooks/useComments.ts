@@ -27,8 +27,7 @@ export const useUpdateComment = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateCommentData }) =>
       commentService.updateComment(id, data),
-    onSuccess: (response, variables) => {
-      // Find the taskId from the comment
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
     },
   });

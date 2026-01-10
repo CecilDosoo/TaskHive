@@ -6,7 +6,6 @@ import { useProjectMembers, useInviteMember, useUpdateMemberRole, useRemoveMembe
 import { useProjectPermissions } from '../hooks/usePermissions';
 import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/user.service';
-import type { UserRole } from '../services/member.service';
 
 interface MemberManagementModalProps {
   isOpen: boolean;

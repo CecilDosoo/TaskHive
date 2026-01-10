@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { useProject } from './useProjects';
 import { useAuth } from '../context/AuthContext';
 import type { UserRole } from '../services/member.service';
@@ -51,7 +50,6 @@ export const useProjectPermissions = (projectId: string | undefined): ProjectPer
     };
   }
 
-  const project = projectData.project;
   const userRole = projectData.userRole as UserRole | null;
   const permissions = projectData.permissions;
 

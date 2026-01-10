@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useProject } from '../hooks/useProjects';
 import { useUpdateTask } from '../hooks/useTasks';
 import { useTaskEvents } from '../hooks/useSocketEvents';
-import { useProjectPermissions } from '../hooks/usePermissions';
 import KanbanBoard from '../components/KanbanBoard';
 import CreateTaskModal from '../components/CreateTaskModal';
 import EditTaskModal from '../components/EditTaskModal';
@@ -18,7 +17,6 @@ export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, error } = useProject(id);
-  const permissions = useProjectPermissions(id);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { notificationService, type Notification } from '../services/notification.service';
+import { notificationService } from '../services/notification.service';
 
 export function useNotifications(read?: boolean) {
   return useQuery({

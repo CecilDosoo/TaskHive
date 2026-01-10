@@ -38,7 +38,7 @@ export const useDeleteTask = () => {
 
   return useMutation({
     mutationFn: (id: string) => taskService.deleteTask(id),
-    onSuccess: (_, taskId) => {
+    onSuccess: () => {
       // Invalidate all project queries since we don't know which project the task belonged to
       queryClient.invalidateQueries({ queryKey: ['projects'] });
       queryClient.invalidateQueries({ queryKey: ['project'] });
@@ -52,7 +52,7 @@ export const useAssignTask = () => {
   return useMutation({
     mutationFn: ({ taskId, userId }: { taskId: string; userId: string }) =>
       taskService.assignTask(taskId, userId),
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       // Invalidate all project queries to refresh task assignments
       queryClient.invalidateQueries({ queryKey: ['projects'] });
       queryClient.invalidateQueries({ queryKey: ['project'] });

@@ -10,7 +10,7 @@ interface NotificationsDropdownProps {
   position: { top: number; right: number };
 }
 
-export default function NotificationsDropdown({ onClose, position }: NotificationsDropdownProps) {
+export default function NotificationsDropdown({ onClose: _onClose, position }: NotificationsDropdownProps) {
   const { data, isLoading } = useNotifications();
   const markAsRead = useMarkAsRead();
   const markAllAsRead = useMarkAllAsRead();
@@ -26,12 +26,12 @@ export default function NotificationsDropdown({ onClose, position }: Notificatio
   useEffect(() => {
     if (!socket) return;
 
-    const handleNotificationCreated = (notification: Notification) => {
+    const handleNotificationCreated = (_notification: Notification) => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       queryClient.invalidateQueries({ queryKey: ['notifications', 'unread-count'] });
     };
 
-    const handleNotificationRead = ({ id }: { id: string }) => {
+    const handleNotificationRead = (_data: { id: string }) => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       queryClient.invalidateQueries({ queryKey: ['notifications', 'unread-count'] });
     };
@@ -41,7 +41,7 @@ export default function NotificationsDropdown({ onClose, position }: Notificatio
       queryClient.invalidateQueries({ queryKey: ['notifications', 'unread-count'] });
     };
 
-    const handleNotificationDeleted = ({ id }: { id: string }) => {
+    const handleNotificationDeleted = (_data: { id: string }) => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       queryClient.invalidateQueries({ queryKey: ['notifications', 'unread-count'] });
     };

@@ -56,35 +56,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await authService.login({ email, password });
       
-      setUser(response.user);
-      setToken(response.token);
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      if (response.user && response.token) {
+        setUser(response.user);
+        setToken(response.token);
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+      }
     } catch (error: any) {
       const errorMessage = error.response?.data?.error?.message || error.message || "Login failed. Please try again.";
       throw new Error(errorMessage);
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name: string, email: string, password: string): Promise<void> => {
     try {
-      const response = await authService.register({ name, email, password });
-      
-      // Don't set user/token if email is not verified - user must verify first
-      if (!response.emailVerified && !response.token) {
-        // Registration successful but email not verified - return response without logging in
-        return response;
-      }
-      
-      // Only set user/token if email is verified (shouldn't happen in normal flow, but handle it)
-      if (response.token) {
-        setUser(response.user);
-        setToken(response.token);
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("user", JSON.stringify(response.user));
-      }
-      
-      return response;
+      await authService.register({ name, email, password });
+      // Registration successful - user will need to verify email before login
+      // No need to set user/token here
     } catch (error: any) {
       const errorMessage = error.response?.data?.error?.message || error.message || "Registration failed. Please try again.";
       throw new Error(errorMessage);
