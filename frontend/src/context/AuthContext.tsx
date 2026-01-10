@@ -57,9 +57,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await authService.login({ email, password });
       
       if (response.user && response.token) {
+        const token = response.token; // Extract to ensure type narrowing
         setUser(response.user);
-        setToken(response.token);
-        localStorage.setItem("token", response.token);
+        setToken(token);
+        localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(response.user));
       }
     } catch (error: any) {
