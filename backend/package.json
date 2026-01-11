@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "prisma generate && prisma migrate deploy && node dist/server.js",
+    "start": "prisma generate && node dist/server.js",
     "start:migrate": "node scripts/start-with-migrations.js",
     "prisma:generate": "prisma generate",
     "prisma:generate:safe": "prisma generate --schema=./prisma/schema.prisma || echo 'Prisma generate skipped - DATABASE_URL not available'",
