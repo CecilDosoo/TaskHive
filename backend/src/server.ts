@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Debug: Check all environment variables (for Railway debugging)
-console.log('🔍 Environment Variables Check: (Redeployed)');
+console.log('🔍 Environment Variables Check:');
 console.log('  NODE_ENV:', process.env.NODE_ENV || 'NOT SET');
 console.log('  PORT:', process.env.PORT || 'NOT SET');
 console.log('  DATABASE_URL:', process.env.DATABASE_URL ? `${process.env.DATABASE_URL.substring(0, 50)}...` : 'UNDEFINED ❌');

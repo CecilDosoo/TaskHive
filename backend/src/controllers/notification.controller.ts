@@ -57,7 +57,7 @@ export const getUnreadCount = async (req: AuthRequest, res: Response) => {
  */
 export const markAsRead = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     const notification = await prisma.notification.findUnique({
@@ -121,7 +121,7 @@ export const markAllAsRead = async (req: AuthRequest, res: Response) => {
  */
 export const deleteNotification = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     const notification = await prisma.notification.findUnique({

@@ -11,7 +11,7 @@ import { createActivityLog } from './activity.controller';
  */
 export const getProjectMembers = async (req: AuthRequest, res: Response) => {
   try {
-    const { id: projectId } = req.params;
+    const projectId = req.params.id as string;
     const userId = req.userId!;
 
     // Check if user can access project
@@ -88,7 +88,7 @@ export const getProjectMembers = async (req: AuthRequest, res: Response) => {
  */
 export const inviteMember = async (req: AuthRequest, res: Response) => {
   try {
-    const { id: projectId } = req.params;
+    const projectId = req.params.id as string;
     const { userId: inviteUserId, role } = req.body;
     const userId = req.userId!;
 
@@ -207,7 +207,8 @@ export const inviteMember = async (req: AuthRequest, res: Response) => {
  */
 export const updateMemberRole = async (req: AuthRequest, res: Response) => {
   try {
-    const { id: projectId, userId: memberUserId } = req.params;
+    const projectId = req.params.id as string;
+    const memberUserId = req.params.userId as string;
     const { role } = req.body;
     const userId = req.userId!;
 
@@ -322,7 +323,8 @@ export const updateMemberRole = async (req: AuthRequest, res: Response) => {
  */
 export const removeMember = async (req: AuthRequest, res: Response) => {
   try {
-    const { id: projectId, userId: memberUserId } = req.params;
+    const projectId = req.params.id as string;
+    const memberUserId = req.params.userId as string;
     const userId = req.userId!;
 
     // Check if user can manage members
@@ -407,7 +409,7 @@ export const removeMember = async (req: AuthRequest, res: Response) => {
  */
 export const leaveProject = async (req: AuthRequest, res: Response) => {
   try {
-    const { id: projectId } = req.params;
+    const projectId = req.params.id as string;
     const userId = req.userId!;
 
     // Check if project exists

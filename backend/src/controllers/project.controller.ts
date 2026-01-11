@@ -113,7 +113,7 @@ export const getProjects = async (req: AuthRequest, res: Response) => {
 
 export const getProject = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     const project = await prisma.project.findFirst({
@@ -230,7 +230,7 @@ export const getProject = async (req: AuthRequest, res: Response) => {
 
 export const updateProject = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { name, description, color } = req.body;
     const userId = req.userId!;
 
@@ -311,7 +311,7 @@ export const updateProject = async (req: AuthRequest, res: Response) => {
 
 export const deleteProject = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     // Check if user can delete project

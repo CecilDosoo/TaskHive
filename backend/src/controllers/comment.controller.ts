@@ -6,7 +6,7 @@ import { createNotification } from './notification.controller';
 
 export const createComment = async (req: AuthRequest, res: Response) => {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId as string;
     const { content } = req.body;
     const userId = req.userId!;
 
@@ -91,7 +91,7 @@ export const createComment = async (req: AuthRequest, res: Response) => {
 
 export const getComments = async (req: AuthRequest, res: Response) => {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId as string;
     const userId = req.userId!;
 
     // Verify task exists and user has access
@@ -144,7 +144,7 @@ export const getComments = async (req: AuthRequest, res: Response) => {
 
 export const updateComment = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { content } = req.body;
     const userId = req.userId!;
 
@@ -194,7 +194,7 @@ export const updateComment = async (req: AuthRequest, res: Response) => {
 
 export const deleteComment = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     // Verify comment exists

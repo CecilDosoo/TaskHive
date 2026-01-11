@@ -91,7 +91,7 @@ export const createTask = async (req: AuthRequest, res: Response) => {
 
 export const updateTask = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { title, description, status, priority, dueDate, taskListId, order } = req.body;
     const userId = req.userId!;
 
@@ -198,7 +198,7 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
 
 export const deleteTask = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     const task = await prisma.task.findUnique({
@@ -245,7 +245,7 @@ export const deleteTask = async (req: AuthRequest, res: Response) => {
 
 export const assignTask = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { userId: assignUserId } = req.body;
     const userId = req.userId!;
 
@@ -350,7 +350,7 @@ export const assignTask = async (req: AuthRequest, res: Response) => {
 
 export const unassignTask = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { userId: unassignUserId } = req.body;
     const userId = req.userId!;
 

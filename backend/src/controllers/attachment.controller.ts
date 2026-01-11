@@ -13,7 +13,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 
 export const uploadAttachment = async (req: AuthRequest, res: Response) => {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId as string;
     const userId = req.userId!;
 
     if (!req.file) {
@@ -67,7 +67,7 @@ export const uploadAttachment = async (req: AuthRequest, res: Response) => {
 
 export const getAttachments = async (req: AuthRequest, res: Response) => {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId as string;
     const userId = req.userId!;
 
     // Verify task exists and user has access
@@ -111,7 +111,7 @@ export const getAttachments = async (req: AuthRequest, res: Response) => {
 
 export const deleteAttachment = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const userId = req.userId!;
 
     // Verify attachment exists

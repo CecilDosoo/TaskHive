@@ -1,11 +1,13 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import prisma from '../config/database';
+import { getParam } from '../utils/route-params';
 
 export const getActivityLogs = async (req: AuthRequest, res: Response) => {
   try {
-    const { projectId } = req.params;
-    const { taskId, limit = 50 } = req.query;
+    const projectId = getParam(req, 'projectId');
+    const taskId = req.query.taskId as string | undefined;
+    const limit = Number(req.query.limit || 50);
     const userId = req.userId!;
 
     // Verify user has access to this project
@@ -51,7 +53,7 @@ export const getActivityLogs = async (req: AuthRequest, res: Response) => {
       orderBy: {
         createdAt: 'desc',
       },
-      take: Number(limit),
+      take: limit,
     });
 
     res.json({ logs });
