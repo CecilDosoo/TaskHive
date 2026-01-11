@@ -12,6 +12,16 @@ console.log('  DATABASE_URL:', process.env.DATABASE_URL ? `${process.env.DATABAS
 console.log('  JWT_SECRET:', process.env.JWT_SECRET ? 'SET ✅' : 'UNDEFINED ❌');
 console.log('  FRONTEND_URL:', process.env.FRONTEND_URL || 'NOT SET');
 
+// List ALL environment variables that might be database-related
+const allEnvKeys = Object.keys(process.env).sort();
+const dbRelatedKeys = allEnvKeys.filter(key => 
+  key.toUpperCase().includes('DATABASE') || 
+  key.toUpperCase().includes('DB') || 
+  key.startsWith('PG') ||
+  key.toUpperCase().includes('POSTGRES')
+);
+console.log('  All DB-related env vars:', dbRelatedKeys.length > 0 ? dbRelatedKeys.join(', ') : 'NONE');
+
 // List all PG* variables (Railway might use these instead)
 const pgVars = Object.keys(process.env).filter(key => key.startsWith('PG'));
 if (pgVars.length > 0) {
@@ -25,6 +35,9 @@ if (pgVars.length > 0) {
 } else {
   console.log('  No PG* variables found');
 }
+
+// Debug: Show first 20 env var names to see what Railway is passing
+console.log('  First 20 env var keys:', allEnvKeys.slice(0, 20).join(', '));
 
 // Final check
 if (!process.env.DATABASE_URL) {
