@@ -1,66 +1,43 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 import crypto from 'crypto';
 
-// Email configuration - supports multiple providers (Gmail, SendGrid, Mailgun, etc.)
-const createTransporter = () => {
-  // Check if SMTP credentials are provided
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    throw new Error(
-      'SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS in your .env file.\n' +
-      'For Gmail: Use an App Password (see EMAIL_SETUP.md for instructions).\n' +
-      'For other providers: Set SMTP_HOST, SMTP_PORT, and SMTP_SECURE as needed.'
-    );
-  }
-
-  // Default to Gmail if no host is specified
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const port = parseInt(process.env.SMTP_PORT || '587');
-  const secure = process.env.SMTP_SECURE === 'true' || port === 465;
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure, // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    // Gmail-specific settings
-    ...(host.includes('gmail.com') && {
-      service: 'gmail',
-    }),
-  });
-};
+// Initialize SendGrid with API key
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+} else if (process.env.SMTP_PASS && process.env.SMTP_PASS.startsWith('SG.')) {
+  // Fallback: use SMTP_PASS if it's a SendGrid API key
+  sgMail.setApiKey(process.env.SMTP_PASS);
+} else {
+  console.warn('[Email] SENDGRID_API_KEY not set. Email sending will fail.');
+}
 
 // Helper to format "from" email address properly
 const formatFromAddress = (): string => {
   const smtpFrom = process.env.SMTP_FROM;
   
   if (!smtpFrom) {
-    return '"TaskHive" <noreply@taskhive.com>';
+    return 'noreply@taskhive.com';
   }
   
-  // If already in format "Name <email@domain.com>", use as is
-  if (smtpFrom.includes('<') && smtpFrom.includes('>')) {
+  // Extract email from "Name <email@domain.com>" format
+  const emailMatch = smtpFrom.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+  if (emailMatch) {
+    return emailMatch[1];
+  }
+  
+  // If it's just an email, use it
+  if (smtpFrom.includes('@')) {
     return smtpFrom;
   }
   
-  // If just email, wrap with TaskHive name
-  // Handle both formats: "TaskHive email@domain.com" or just "email@domain.com"
-  const emailMatch = smtpFrom.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
-  if (emailMatch) {
-    return `"TaskHive" <${emailMatch[1]}>`;
-  }
-  
   // Default fallback
-  return '"TaskHive" <noreply@taskhive.com>';
+  return 'noreply@taskhive.com';
 };
 
 export const sendVerificationEmail = async (email: string, name: string, token: string) => {
-  const transporter = createTransporter();
   const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email?token=${token}`;
 
-  const mailOptions = {
+  const msg = {
     from: formatFromAddress(),
     to: email,
     subject: 'Verify your TaskHive account',
@@ -136,18 +113,17 @@ export const sendVerificationEmail = async (email: string, name: string, token: 
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`[Email] Verification email sent successfully to ${email} (Message ID: ${info.messageId})`);
+    await sgMail.send(msg);
+    console.log(`[Email] Verification email sent successfully to ${email}`);
     
-    return info;
+    return { success: true };
   } catch (error: any) {
     console.error(`[Email] Failed to send verification email to ${email}:`, error.message);
     
     // Provide helpful error messages
-    if (error.code === 'EAUTH') {
-      throw new Error('SMTP authentication failed. Please check your SMTP_USER and SMTP_PASS in .env file.');
-    } else if (error.code === 'ECONNECTION') {
-      throw new Error('Could not connect to SMTP server. Please check your SMTP_HOST and SMTP_PORT settings.');
+    if (error.response) {
+      const { body, statusCode } = error.response;
+      throw new Error(`SendGrid API error (${statusCode}): ${body?.errors?.[0]?.message || error.message}`);
     } else {
       throw new Error(`Failed to send email: ${error.message}`);
     }
@@ -163,9 +139,7 @@ export const sendNotificationEmail = async (
   actionUrl?: string,
   actionText?: string
 ) => {
-  const transporter = createTransporter();
-
-  const mailOptions = {
+  const msg = {
     from: formatFromAddress(),
     to: email,
     subject,
@@ -236,18 +210,17 @@ export const sendNotificationEmail = async (
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`[Email] Notification email sent successfully to ${email} (Message ID: ${info.messageId})`);
+    await sgMail.send(msg);
+    console.log(`[Email] Notification email sent successfully to ${email}`);
     
-    return info;
+    return { success: true };
   } catch (error: any) {
     console.error(`[Email] Failed to send notification email to ${email}:`, error.message);
     
     // Provide helpful error messages
-    if (error.code === 'EAUTH') {
-      throw new Error('SMTP authentication failed. Please check your SMTP_USER and SMTP_PASS in .env file.');
-    } else if (error.code === 'ECONNECTION') {
-      throw new Error('Could not connect to SMTP server. Please check your SMTP_HOST and SMTP_PORT settings.');
+    if (error.response) {
+      const { body, statusCode } = error.response;
+      throw new Error(`SendGrid API error (${statusCode}): ${body?.errors?.[0]?.message || error.message}`);
     } else {
       throw new Error(`Failed to send email: ${error.message}`);
     }
