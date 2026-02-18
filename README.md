@@ -137,7 +137,3 @@ The backend uses Socket.IO. Clients join project rooms and receive live updates 
 ## Email Verification
 
 Email delivery uses the SendGrid Web API. Verify the sender identity in SendGrid and set `SMTP_FROM` to that verified email.
-
-## License
-
-MIT
